@@ -20,7 +20,7 @@ You can browse to the GoCD dashboard at http://DOCKER_HOST_IP:8153
 
     > ./start
 
-# Once you have Go running
+# Once you have GoCD running
 
 Run these commands from a different terminal open to the same working directory for the demo. Do not CTRL-C to kill things as it might leave you unable to restart your agent. If you do have trouble restarting the agent, simply remove the agent container.
 
