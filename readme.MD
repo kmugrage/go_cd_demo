@@ -28,7 +28,7 @@ Run these commands from a different terminal open to the same working directory 
 
 * Navigate to Admin>Config XML
 * Click Blue EDIT Button
-* Paste contents of config_simple_demo.xml
+* Paste contents of config_simple_demo.xml after the line that begins <server artifactsdir="artifacts"
 
 ## Take backup/snapshot (This will stop all services.)
 
