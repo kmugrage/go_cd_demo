@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# stop everything
+docker-compose stop
+
+# remove server containers
+docker rm gocd-demo-server-data || true
+docker rm gocd-demo-server || true
+
+# recreate data container from backup
+docker create -v /var/lib/go-server -v /var/log/go-server -v /etc/go -v /go-addons -v /var/go --name gocd-demo-server-data gocd/gocd-server
+docker run --volumes-from gocd-demo-server-data -v $(pwd):/backup gocd/gocd-server bash -c "cd / && tar xzvf /backup/backup.tar.gz"

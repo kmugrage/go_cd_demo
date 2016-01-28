@@ -1,0 +1,14 @@
+server:
+  image: gocd/gocd-server
+  volumes_from:
+    - gocd-demo-server-data
+  ports:
+    - "8153:8153"
+    - "8154:8154"
+  container_name: "gocd-demo-server"
+agent:
+  build: .
+  dockerfile: Dockerfile-agent
+  links:
+    - server:go-server
+  container_name: "gocd-demo-agent"

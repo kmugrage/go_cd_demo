@@ -1,0 +1,97 @@
+<pipelines group="CalculatorValueStream">
+    <pipeline name="Adder">
+      <environmentvariables>
+        <variable name="JAVA_HOME">
+          <value>/usr/lib/jvm/java-8-oracle</value>
+        </variable>
+      </environmentvariables>
+      <materials>
+        <git url="https://github.com/djrice/cd_ex_adder.git" />
+      </materials>
+      <stage name="FastFeedback">
+        <jobs>
+          <job name="Units">
+            <tasks>
+              <ant target="test" />
+            </tasks>
+            <artifacts>
+              <test src="build/reports/xml/junit" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+      <stage name="Jar">
+        <jobs>
+          <job name="MakeJar">
+            <tasks>
+              <ant target="jar" />
+            </tasks>
+            <artifacts>
+              <artifact src="build/jar/adder.jar" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Multiplier">
+      <environmentvariables>
+        <variable name="JAVA_HOME">
+          <value>/usr/lib/jvm/java-8-oracle</value>
+        </variable>
+      </environmentvariables>
+      <materials>
+        <git url="https://github.com/djrice/cd_ex_multiplier.git" />
+      </materials>
+      <stage name="FastFeedback">
+        <jobs>
+          <job name="Units">
+            <tasks>
+              <ant target="test" />
+            </tasks>
+            <artifacts>
+              <test src="build/reports/xml/junit" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+      <stage name="Jar">
+        <jobs>
+          <job name="MakeJar">
+            <tasks>
+              <ant target="jar" />
+            </tasks>
+            <artifacts>
+              <artifact src="build/jar/multiplier.jar" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Calculator">
+      <environmentvariables>
+        <variable name="JAVA_HOME">
+          <value>/usr/lib/jvm/java-8-oracle</value>
+        </variable>
+      </environmentvariables>
+      <materials>
+        <pipeline pipelineName="Adder" stageName="Jar" />
+        <pipeline pipelineName="Multiplier" stageName="Jar" materialName="Multiplier" />
+        <git url="https://github.com/djrice/cd_ex_calculator.git" />
+      </materials>
+      <stage name="FastFeedback">
+        <jobs>
+          <job name="Units">
+            <tasks>
+              <fetchartifact pipeline="Adder" stage="Jar" job="MakeJar" srcfile="adder.jar" dest="lib">
+                <runif status="passed" />
+              </fetchartifact>
+              <fetchartifact pipeline="Multiplier" stage="Jar" job="MakeJar" srcfile="multiplier.jar" dest="lib">
+                <runif status="passed" />
+              </fetchartifact>
+              <ant target="test" />
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>

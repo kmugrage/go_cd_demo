@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# create data container
+docker create -v /var/lib/go-server -v /var/log/go-server -v /etc/go -v /go-addons -v /var/go --name gocd-demo-server-data gocd/gocd-server
+
+# build agent
+docker-compose build agent

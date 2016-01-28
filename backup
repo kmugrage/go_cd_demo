@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# stop everything
+docker-compose stop
+
+# backup server volumes to a tar file
+docker run --volumes-from gocd-demo-server-data -v $(pwd):/backup gocd/gocd-server tar -cvzf /backup/backup.tar.gz /var/lib/go-server /var/log/go-server /etc/go /go-addons /var/go
